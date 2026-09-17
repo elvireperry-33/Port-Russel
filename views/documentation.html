@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation API - Port Russell</title>
+</head>
+<body>
+
+  <h1>Documentation de l'API - Port de Plaisance Russell</h1>
+
+  <a href="/dashboard">Retour au Dashboard</a>
+<h2>Gestion des Catways</h2>
+
+<p><strong>GET /catways</strong> : récupérer la liste de tous les catways.</p>
+
+<p><strong>GET /catways/:id</strong> : récupérer les informations d'un catway.</p>
+
+<p><strong>POST /catways</strong> : créer un nouveau catway.</p>
+
+<p><strong>PUT /catways/:id</strong> : modifier l'état d'un catway.</p>
+
+<p><strong>DELETE /catways/:id</strong> : supprimer un catway.</p>
+<h2>Gestion des réservations</h2>
+
+<p><strong>GET /catways/:id/reservations</strong> : récupérer les réservations d'un catway.</p>
+
+<p><strong>GET /catway/:id/reservations/:idReservation</strong> : récupérer une réservation en particulier.</p>
+
+<p><strong>POST /catways/:id/reservations</strong> : créer une réservation.</p>
+
+<p><strong>PUT /catways/:id/reservations</strong> : modifier une réservation.</p>
+
+<p><strong>DELETE /catway/:id/reservations/:idReservation</strong> : supprimer une réservation.</p>
+<h2>Gestion des utilisateurs</h2>
+
+<p><strong>GET /users/</strong> : récupérer la liste des utilisateurs.</p>
+
+<p><strong>GET /users/:email</strong> : récupérer un utilisateur grâce à son email.</p>
+
+<p><strong>POST /users/</strong> : créer un utilisateur.</p>
+
+<p><strong>PUT /users/:email</strong> : modifier un utilisateur.</p>
+
+<p><strong>DELETE /users/:email</strong> : supprimer un utilisateur.</p>
+<h2>Authentification</h2>
+
+<p><strong>POST /login</strong> : connecter un utilisateur avec son email et son mot de passe.</p>
+
+<p><strong>GET /logout</strong> : déconnecter l'utilisateur.</p>
+</body>
+</html>

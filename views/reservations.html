@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des réservations</title>
+</head>
+
+<body>
+    <h1>Gestion des réservations</h1>
+
+    <a href="/dashboard">Retour au Dashboard</a>
+
+    <h2>Ajouter une réservation</h2>
+
+    <form id="addReservationForm">
+        <label for="catwayNumber">Numéro du Catway :</label>
+        <input type="number" id="catwayNumber" required>
+
+        <label for="clientName">Nom du client :</label>
+        <input type="text" id="clientName" required>
+
+        <label for="boatName">Nom du bateau :</label>
+        <input type="text" id="boatName" required>
+
+        <label for="startDate">Date de début :</label>
+        <input type="date" id="startDate" required>
+
+        <label for="endDate">Date de fin :</label>
+        <input type="date" id="endDate" required>
+
+        <button type="submit">Ajouter</button>
+    </form>
+<h2>Modifier une réservation</h2>
+
+<form id="updateReservationForm">
+  <label>ID de la réservation :</label>
+  <input type="text" id="updateId" required>
+
+  <label>Nom du bateau :</label>
+  <input type="text" id="updateBoatName" required>
+
+  <button type="submit">Modifier</button>
+</form>
+<h2>Supprimer une réservation</h2>
+<form id="deleteReservationForm">
+  <label>ID de la réservation :</label>
+  <input type="text" id="deleteId" required>
+  <button type="submit">Supprimer</button>
+</form>
+<h2>Liste des réservations</h2>
+<table>
+    <thead>
+        <tr>
+          <th>ID</th>
+            <th>Catway</th>
+            <th>Client</th>
+            <th>Bateau</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+        </tr>
+    </thead>
+
+    <tbody id="reservationsBody">
+    </tbody>
+</table>
+
+<script>
+    fetch('/reservations')
+        .then(response => response.json())
+        .then(reservations => {
+            const reservationsBody = document.getElementById('reservationsBody');
+
+            reservations.forEach(reservation => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                <td>${reservation._id}</td>
+                    <td>${reservation.catwayNumber}</td>
+                    <td>${reservation.clientName}</td>
+                    <td>${reservation.boatName}</td>
+                    <td>${new Date(reservation.startDate).toLocaleDateString()}</td>
+                    <td>${new Date(reservation.endDate).toLocaleDateString()}</td>
+                `;
+
+                reservationsBody.appendChild(row);
+            });
+        });
+        document.getElementById('addReservationForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const catwayNumber = Number(document.getElementById('catwayNumber').value);
+    const clientName = document.getElementById('clientName').value;
+    const boatName = document.getElementById('boatName').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const response = await fetch('/reservations', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            catwayNumber,
+            clientName,
+            boatName,
+            startDate,
+            endDate
+        })
+    });
+
+    if (response.ok) {
+        alert('Réservation ajoutée !');
+        window.location.reload();
+    } else {
+        alert("Erreur lors de l'ajout de la réservation");
+    }
+});
+document.getElementById('addReservationForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const reservation = {
+    catwayNumber: Number(document.getElementById('catwayNumber').value),
+    clientName: document.getElementById('clientName').value,
+    boatName: document.getElementById('boatName').value,
+    startDate: document.getElementById('startDate').value,
+    endDate: document.getElementById('endDate').value
+  };
+
+  const response = await fetch('/reservations', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(reservation)
+  });
+
+  if (response.ok) {
+    alert('Réservation ajoutée !');
+    window.location.reload();
+  } else {
+    alert("Erreur lors de l'ajout");
+  }
+});
+document.getElementById('updateReservationForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const id = document.getElementById('updateId').value;
+    const boatName = document.getElementById('updateBoatName').value;
+
+    const response = await fetch('/reservations/' + id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ boatName })
+    });
+
+    if (response.ok) {
+        alert('Réservation modifiée !');
+        window.location.reload();
+   } else {
+    const errorData = await response.json();
+    alert('Erreur : ' + errorData.error);
+
+    }
+});
+document.getElementById('deleteReservationForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const id = document.getElementById('deleteId').value;
+
+    const response = await fetch('/reservations/' + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (response.ok) {
+        alert('Réservation supprimée !');
+        window.location.reload();
+    } else {
+        const errorData = await response.json();
+        alert('Erreur : ' + errorData.error);
+    }
+});
+</script>
+</body>
+</html>

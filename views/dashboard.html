@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+</head>
+
+<body>
+
+  <h1>Dashboard</h1>
+
+  <p>Bienvenue sur votre dashboard !</p>
+
+  <p id="userInfo"></p>
+  <p id="date"></p>
+
+  <nav>
+    <a href="/catways.html">Catways</a> |
+    <a href="/reservations.html">Réservations</a> |
+    <a href="/users.html">Utilisateurs</a> |
+    <a href="/documentation.html">Documentation</a> |
+    <a href="/" id="logout">Déconnexion</a>
+  </nav>
+
+  <h2>Réservations en cours</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nom du bateau</th>
+        <th>Date de réservation</th>
+        <th>Durée</th>
+      </tr>
+    </thead>
+
+    <tbody id="reservationsTable">
+    </tbody>
+  </table>
+
+  <script>
+    const userEmail = localStorage.getItem('userEmail');
+
+    if (userEmail) {
+      fetch('/users/' + userEmail)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('userInfo').textContent =
+            `Connecté en tant que : ${data.username} - ${data.email}`;
+        })
+        .catch(error => {
+          console.error(
+            'Erreur lors de la récupération de l’utilisateur :',
+            error
+          );
+        });
+    } else {
+      document.getElementById('userInfo').textContent =
+        'Aucun utilisateur connecté.';
+    }
+
+    const currentDate = new Date();
+
+    document.getElementById('date').textContent =
+      `Date actuelle : ${currentDate.toLocaleDateString()}`;
+
+    fetch('/reservations')
+      .then(response => response.json())
+      .then(reservations => {
+        const table = document.getElementById('reservationsTable');
+        const now = new Date();
+
+        reservations.forEach(reservation => {
+          const startDate = new Date(reservation.startDate);
+          const endDate = new Date(reservation.endDate);
+
+          if (startDate <= now && endDate >= now) {
+            const row = document.createElement('tr');
+
+            const duration =
+              Math.ceil(
+                (endDate - startDate) / (1000 * 60 * 60 * 24)
+              );
+
+            row.innerHTML = `
+              <td>${reservation._id}</td>
+              <td>${reservation.boatName}</td>
+              <td>${startDate.toLocaleDateString()}</td>
+              <td>${duration} jour(s)</td>
+            `;
+
+            table.appendChild(row);
+          }
+        });
+      })
+      .catch(error => {
+        console.error(
+          'Erreur lors du chargement des réservations :',
+          error
+        );
+      });
+
+    document.getElementById('logout').addEventListener('click', () => {
+      localStorage.removeItem('userEmail');
+    });
+  </script>
+
+</body>
+
+</html>

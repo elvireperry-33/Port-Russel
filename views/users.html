@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des utilisateurs</title>
+</head>
+<body>
+
+  <h1>Gestion des utilisateurs</h1>
+  <a href="/dashboard">Retour au Dashboard</a>
+
+  <h2>Ajouter un utilisateur</h2>
+<form id="addUserForm">
+  <label>Nom :</label>
+  <input type="text" id="username" required>
+
+  <label>Email :</label>
+  <input type="email" id="email" required>
+
+  <label>Mot de passe :</label>
+  <input type="password" id="password" required>
+
+  <button type="submit">Ajouter</button>
+</form>
+<h2>Modifier un utilisateur</h2>
+
+<form id="updateUserForm">
+  <label>Email :</label>
+  <input type="email" id="updateEmail" required>
+
+  <label>Nouveau nom :</label>
+  <input type="text" id="updateUsername" required>
+
+  <button type="submit">Modifier</button>
+</form>
+<h2>Supprimer un utilisateur</h2>
+
+<form id="deleteUserForm">
+  <label>Email :</label>
+  <input type="email" id="deleteEmail" required>
+
+  <button type="submit">Supprimer</button>
+</form>
+<h2>Liste des utilisateurs</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+
+  <tbody id="usersBody">
+  </tbody>
+</table>
+<script>
+  async function loadUsers() {
+    const response = await fetch('/users');
+    const users = await response.json();
+
+    const usersBody = document.getElementById('usersBody');
+    usersBody.innerHTML = '';
+        users.forEach(user => {
+      const row = document.createElement('tr');
+
+      row.innerHTML = `
+        <td>${user.username}</td>
+        <td>${user.email}</td>
+      `;
+
+      usersBody.appendChild(row);
+    });
+  }
+  loadUsers();
+  document.getElementById('addUserForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const username = document.getElementById('username').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  const response = await fetch('/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, email, password })
+  });
+  if (response.ok) {
+  alert('Utilisateur ajouté !');
+  window.location.reload();
+} else {
+  const errorData = await response.json();
+  alert('Erreur : ' + errorData.error);
+}
+});
+document.getElementById('updateUserForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById('updateEmail').value;
+  const username = document.getElementById('updateUsername').value;
+
+  const response = await fetch('/users/' + encodeURIComponent(email), {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username })
+  });
+  if (response.ok) {
+  alert('Utilisateur modifié !');
+  window.location.reload();
+} else {
+  const errorData = await response.json();
+  alert('Erreur : ' + errorData.error);
+}
+}); 
+document.getElementById('deleteUserForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const email = document.getElementById('deleteEmail').value;
+
+  const response = await fetch('/users/' + encodeURIComponent(email), {
+    method: 'DELETE'
+  });
+
+  if (response.ok) {
+    alert('Utilisateur supprimé !');
+    window.location.reload();
+  } else {
+    const errorData = await response.json();
+    alert('Erreur : ' + errorData.error);
+  }
+});
+  </script>
+</body>
+</html>
