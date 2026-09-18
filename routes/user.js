@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+/**
+ * Récupère la liste de tous les utilisateurs.
+ * @route GET /users
+ * @returns {Array} Liste des utilisateurs
+ */
 router.get('/', async (req, res) => {
   try {
     const users = await User.find();
@@ -9,6 +14,12 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+/**
+ * Récupère un utilisateur grâce à son adresse e-mail.
+ * @route GET /users/:email
+ * @param {string} email Adresse e-mail de l'utilisateur
+ * @returns {Object} Utilisateur trouvé
+ */
 router.get('/:email', async (req, res) => {
   try {
    const user = await User.findOne({ email: req.params.email });
@@ -17,6 +28,15 @@ router.get('/:email', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+/**
+ * Crée un nouvel utilisateur.
+ * @route POST /users
+ * @param {string} username Nom de l'utilisateur
+ * @param {string} email Adresse e-mail de l'utilisateur
+ * @param {string} password Mot de passe de l'utilisateur
+ * @returns {Object} Utilisateur créé
+
+ */
 router.post('/', async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -36,6 +56,13 @@ router.post('/', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+/**
+ * Modifie les informations d'un utilisateur.
+ * @route PUT /users/:email
+ * @param {string} email Adresse e-mail de l'utilisateur
+ * @returns {Object} Utilisateur modifié
+
+ */
 router.put('/:email', async (req, res) => {
   try {
 const user = await User.findOneAndUpdate(
@@ -48,6 +75,13 @@ const user = await User.findOneAndUpdate(
     res.status(400).json({ error: error.message });
   }
 });
+/**
+ * Supprime un utilisateur.
+ * @route DELETE /users/:email
+ * @param {string} email Adresse e-mail de l'utilisateur
+ * @returns {Object} Confirmation de suppression
+
+ */
 router.delete('/:email', async (req, res) => {
   try {
     await User.findOneAndDelete({ email: req.params.email });

@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Catway = require('../models/catway');
+/**
+ * Récupère la liste de tous les catways.
+ * @route GET /catways
+ * @returns {Array} Liste des catways
+ */
 router.get('/', async (req, res) => {
   try {
     const catways = await Catway.find();
@@ -9,6 +14,12 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+/**
+ * Récupère un catway grâce à son numéro.
+ * @route GET /catways/:id
+ * @param {number} id Numéro du catway
+ * @returns {Object} Catway trouvé
+ */
 router.get('/:id', async (req, res) => {
   try {
     const catway = await Catway.findOne({
@@ -24,6 +35,11 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+/**
+ * Crée un nouveau catway.
+ * @route POST /catways
+ * @returns {Object} Catway créé
+ */
 router.post('/', async (req, res) => {
   try {
     const catway = new Catway(req.body);
@@ -34,6 +50,12 @@ router.post('/', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+/**
+ * Modifie l'état d'un catway.
+ * @route PUT /catways/:id
+ * @param {number} id Numéro du catway
+ * @returns {Object} Catway modifié
+ */
 router.put('/:id', async (req, res) => {
   try {
     const catway = await Catway.findOneAndUpdate(
@@ -51,6 +73,12 @@ router.put('/:id', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+/**
+ * Supprime un catway.
+ * @route DELETE /catways/:id
+ * @param {number} id Numéro du catway
+ * @returns {Object} Confirmation de suppression
+ */
 router.delete('/:id', async (req, res) => {
   try {
     const catway = await Catway.findOneAndDelete({
@@ -67,3 +95,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 module.exports = router;
+
