@@ -19,6 +19,16 @@ router.get('/:email', async (req, res) => {
 });
 router.post('/', async (req, res) => {
   try {
+    const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({ error: 'Tous les champs sont requis' });
+    }
+    if (!email.includes('@')) {
+      return res.status(400).json({ error: 'Adresse e-mail invalide' });
+    } 
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'Le mot de passe doit contenir au moins 6 caractères' });
+    } 
     const user = new User(req.body);
     await user.save();
     res.status(201).json(user);
@@ -26,7 +36,7 @@ router.post('/', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
-router.put('/:id', async (req, res) => {
+router.put('/:email', async (req, res) => {
   try {
 const user = await User.findOneAndUpdate(
     { email: req.params.email },
