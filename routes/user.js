@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
     if (!username || !email || !password) {
       return res.status(400).json({ error: 'Tous les champs sont requis' });
     }
-    if (!email.includes('@')) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: 'Adresse e-mail invalide' });
     } 
     if (password.length < 6) {
