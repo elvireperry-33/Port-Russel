@@ -26,3 +26,43 @@ http://localhost:3000
 ## compte de démonstration
 Email : elvire@test.com
 Mot de passe : test1234
+## Technologie utilisées
+- HTML5
+- CSS3
+- JavaScript
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- Git et GitHub
+## Routes de L'API
+### Catways
+- GET /catways : liste des catways
+- GET /catways/:id : détail d'un catway
+- POST /catways : ajouter un catway
+- PUT /catways/:id : modifier un catway
+- DELETE /catways/:id : supprimer un catway
+### Réservations
+- GET /reservations : liste des réservations
+- POST /reservations : ajouter une réservation
+- PUT /reservations/:id : modifier une réservation
+- DELETE /reservations/:id : supprimer une réservation
+### Utilisateurs
+- GET /users : liste des utilisateurs
+- GET /users/:email : afficher un utilisateur
+- POST /users : ajouter un utilisateur
+- PUT /users/:email : modifier un utilisateur
+- DELETE /users/:email : supprimer un utilisateur
+### Authentification
+- POST /auth/login : connecter un utilisateur
+- GET /auth/logout : déconnecter un utilisateur
+## Documentation de l'API
+La documentation complète de l'API est accessible depuis l'application :
+https://port-russel-oe3e.onrender.com/documentation.html
+## Application en ligne
+L'application est déployée sur Render :
+https://port-russel-oe3e.onrender.com/
+## Dépôt GitHub
+Le code source du projet est disponible sur GitHub :
+https://github.com/elvireperry-33/Port-Russel
+
