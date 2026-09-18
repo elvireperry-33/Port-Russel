@@ -46,7 +46,7 @@ router.put('/:idReservation', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
-router.delete('/:id/:idReservation', async (req, res) => {
+router.delete('/:idReservation', async (req, res) => {
   try {
     await Reservation.findByIdAndDelete(req.params.idReservation);
     res.status(200).json({ message: 'Réservation supprimée' });
